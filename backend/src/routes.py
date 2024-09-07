@@ -1,8 +1,21 @@
+from typing import List
 from fastapi.routing import APIRouter
+from database import Product
+from schemas import ProductOutSchema, ProductBaseSchema
 
 router = APIRouter()
 
 
 @router.get("/products")
-async def get_products():
-    return []
+async def get_products() -> List[ProductOutSchema]:
+    products = await Product.all()
+    return products
+
+
+@router.post("/products")
+async def post_products(data: ProductBaseSchema) -> ProductOutSchema:
+    product = Product(**data.model_dump())
+    await product.save()
+    return product
+
+

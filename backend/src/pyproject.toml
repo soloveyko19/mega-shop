@@ -11,6 +11,9 @@ fastapi = "^0.114.0"
 sqlalchemy = "^2.0.34"
 python-dotenv = "^1.0.1"
 asyncpg = "^0.29.0"
+alembic = "^1.13.2"
+postgres = "^4.0"
+uvicorn = "^0.30.6"
 
 
 [build-system]
