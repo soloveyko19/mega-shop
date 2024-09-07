@@ -1,0 +1,11 @@
+services:
+  database:
+    image: postgres:16.4-alpine
+    container_name: postgres
+    # ports:
+    #   - 5432:5432
+    env_file:
+      - ./env_file
+    volumes:
+      - ./database/init_db.sql:/docker-entrypoint-initdb.d/
+      - ./database/postgres_data:/var/lib/postgresql/data
