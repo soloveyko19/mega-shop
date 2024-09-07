@@ -40,8 +40,3 @@ class Product(Base):
             query = select(Product).order_by('id')
             res = await session.execute(query)
             return res.scalars().all()
-
-
-
-
-

@@ -1,7 +1,7 @@
 from typing import List
 from fastapi.routing import APIRouter
-from database import Product
-from schemas import ProductOutSchema, ProductBaseSchema
+from database.postgres import Product
+from database.schemas import ProductOutSchema, ProductBaseSchema
 
 router = APIRouter()
 
