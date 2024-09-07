@@ -1,17 +1,17 @@
 from typing import Iterable
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
-from sqlalchemy import Column, String, DECIMAL, Integer, select
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy import Column, ForeignKey, String, DECIMAL, Integer, select
 
 import conf
 
 
 POSTRGES_URL = f"postgresql+asyncpg://{conf.POSTGRES_USERNAME}:{conf.POSTGRES_PASSWORD}@{conf.POSTGRES_HOSTNAME}/{conf.POSTGRES_DB_NAME}"
 engine = create_async_engine(url=POSTRGES_URL)
-async_session = sessionmaker(
+async_session = async_sessionmaker(
     bind=engine,
-    expire_on_commit=False,
-    class_=AsyncSession
+    class_=AsyncSession,
+    expire_on_commit=False
 )
 
 class Base(DeclarativeBase):
@@ -26,17 +26,29 @@ class Product(Base):
     description = Column(String(4000), nullable=False)
     price = Column(DECIMAL(15, 2), nullable=False)
     image_url = Column(String(2048))
+    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
+    category = relationship("Category", lazy="joined")
 
-    async def save(self) -> 'Product':
+    async def save(self) -> None:
         async with async_session() as session:
-            session: AsyncSession
             session.add(self)
             await session.commit()
+
 
     @classmethod
     async def all(cls) -> Iterable['Product']:
         async with async_session() as session:
-            session: AsyncSession
             query = select(Product).order_by('id')
             res = await session.execute(query)
             return res.scalars().all()
+        
+
+class Category(Base):
+    __tablename__ = "categories"
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), nullable=False)
+
+
+
+
