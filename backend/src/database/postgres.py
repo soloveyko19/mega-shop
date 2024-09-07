@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Self
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy import Column, ForeignKey, String, DECIMAL, Integer, select
@@ -18,7 +18,31 @@ class Base(DeclarativeBase):
     pass
 
 
-class Product(Base):
+class BaseModel:
+    id: Column
+
+    @classmethod
+    async def all(cls) -> Iterable[Self]:
+        async with async_session() as session:
+            query = select(cls).order_by('id')
+            res = await session.execute(query)
+            return res.scalars().all()
+    
+    @classmethod
+    async def get(cls, id_: int) -> Self | None:
+        async with async_session() as session:
+            query = select(cls).filter(cls.id == id_)
+            res = await session.execute(query)
+            return res.scalar_one_or_none()
+
+
+    async def save(self) -> None:
+        async with async_session() as session:
+            session.add(self)
+            await session.commit()
+
+
+class Product(Base, BaseModel):
     __tablename__ = "products"
 
     id = Column(Integer, nullable=False, primary_key=True, autoincrement=True)
@@ -27,28 +51,13 @@ class Product(Base):
     price = Column(DECIMAL(15, 2), nullable=False)
     image_url = Column(String(2048))
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
-    category = relationship("Category", lazy="joined")
-
-    async def save(self) -> None:
-        async with async_session() as session:
-            session.add(self)
-            await session.commit()
-
-
-    @classmethod
-    async def all(cls) -> Iterable['Product']:
-        async with async_session() as session:
-            query = select(Product).order_by('id')
-            res = await session.execute(query)
-            return res.scalars().all()
+    category = relationship("Category", lazy="joined", backref="products")
         
 
-class Category(Base):
+class Category(Base, BaseModel):
     __tablename__ = "categories"
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
 
-
-
-
+    
