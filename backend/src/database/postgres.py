@@ -50,7 +50,7 @@ class Product(Base, BaseModel):
     description = Column(String(4000), nullable=False)
     price = Column(DECIMAL(15, 2), nullable=False)
     image_url = Column(String(2048))
-    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
+    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=False)
     category = relationship("Category", back_populates="products", lazy="joined")
         
 
