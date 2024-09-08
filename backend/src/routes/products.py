@@ -31,3 +31,20 @@ async def get_products_by_category(category_id: int) -> Iterable[Product]:
     return products
 
 
+@router.get("/products/{id}", response_model=ProductOutSchema)
+async def get_product_by_id(id: int):
+    product = await Product.get(id)
+    if not product:
+        raise HTTPException(404, "Oops... Looks like you're requesting a product that doesn't exist.")
+    return product
+
+
+@router.put("/products/{id}", response_model=ProductOutSchema)
+async def put_product_by_id(new_product: ProductInSchema, id: int):
+    product = await Product.get(id)
+    if not product:
+        raise HTTPException(404, "No such product you're requesting.")
+    for field, value in new_product.model_dump().items():
+        product.__setattr__(field, value)
+    await product.save()
+    return product

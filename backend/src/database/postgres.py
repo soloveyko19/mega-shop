@@ -26,14 +26,14 @@ class BaseModel:
         async with async_session() as session:
             query = select(cls).order_by('id')
             res = await session.execute(query)
-            return res.scalars().all()
+            return res.scalars().unique().all()
     
     @classmethod
     async def get(cls, id_: int) -> Self | None:
         async with async_session() as session:
             query = select(cls).filter(cls.id == id_)
             res = await session.execute(query)
-            return res.scalar_one_or_none()
+            return res.unique().scalar_one_or_none()
 
 
     async def save(self) -> None:
@@ -51,7 +51,7 @@ class Product(Base, BaseModel):
     price = Column(DECIMAL(15, 2), nullable=False)
     image_url = Column(String(2048))
     category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True)
-    category = relationship("Category", lazy="joined", backref="products")
+    category = relationship("Category", back_populates="products", lazy="joined")
         
 
 class Category(Base, BaseModel):
@@ -59,5 +59,6 @@ class Category(Base, BaseModel):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
+    products = relationship("Product", back_populates="category", lazy="joined")
 
     
