@@ -1,13 +1,13 @@
 <template>
     <div class="page">
         <Card>
-            <h1 class="title">{{ category }}</h1>
+            <h1 class="title" v-if="category">{{ category.name }}</h1>
             <div class="products" v-if="products">
                 <ProductList :products="products" />
             </div>
             <div class="product__error" v-else-if="error">
                 Error
-                <Button @click="clear(); refresh()">Try again</Button>
+                <button @click="clear(); refresh()">Try again</button>
             </div>
             <div class="products__loading" v-else>
                 <LoadingSpinner />
@@ -17,9 +17,13 @@
 </template>
 
 <script setup>
-const { category } = useRoute().params
-const url = `https://fakestoreapi.com/products/category/` + category
-const { data: products, error, refresh, clear } = useFetch(url, {
+const config = useRuntimeConfig()
+
+const { categoryId } = useRoute().params
+
+const { data: category } = useFetch(`${config.public.apiUrl}/category/${categoryId}`)
+
+const { data: products, error, refresh, clear } = useFetch(`${config.public.apiUrl}/products/category/${categoryId}`, {
     timeout: 10000
 })
 </script>

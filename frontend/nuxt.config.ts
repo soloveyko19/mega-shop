@@ -5,5 +5,10 @@ export default defineNuxtConfig({
   modules: ['@nuxt/image'],
   css: [
     './assets/css/global.css'
-  ]
+  ],
+  runtimeConfig: {
+    public: {
+      apiUrl: "null"
+    }
+  }
 })

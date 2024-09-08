@@ -13,10 +13,10 @@
             </div>
         </div>
         <ul class="category__list" v-if="showCategoryList && categories">
-            <li v-for="category in categories" :key="category" class="category__item">
-                <NuxtLink :to="`/product/category/${category}`">
+            <li v-for="category in categories" :key="category.id" class="category__item">
+                <NuxtLink :to="`/product/category/${category.id}`">
                     <div class="item__wrapper">
-                        {{ category }}
+                        {{ category.name }}
                     </div>
                 </NuxtLink>
             </li>
@@ -32,8 +32,11 @@
 
 <script setup lang="ts">
 import downArrowImage from '@/assets/img/arrow-down.svg'
+
+const config = useRuntimeConfig()
 let showCategoryList = useState<boolean>("showCategoryList", () => false)
-const { data: categories, error } = useFetch("https://fakestoreapi.com/products/categories",
+
+const { data: categories, error } = useFetch(`${config.public.apiUrl}/category`,
     {
         timeout: 10000,
         server: false,
@@ -118,6 +121,7 @@ const { data: categories, error } = useFetch("https://fakestoreapi.com/products/
     background-color: rgb(210, 210, 210);
     display: flex;
     justify-content: center;
+    color: rgb(33, 33, 33);
 }
 
 </style>

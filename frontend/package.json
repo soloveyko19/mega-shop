@@ -4,14 +4,15 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
-    "devg": "nuxt dev --host 0.0.0.0",
+    "dev": "nuxt dev --dotenv ../.env",
+    "devg": "nuxt dev --host 0.0.0.0 --dotenv ../.env",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
     "@nuxt/image": "^1.8.0",
+    "@nuxtjs/dotenv": "^1.4.2",
     "nuxt": "^3.13.0",
     "vue": "latest"
   }

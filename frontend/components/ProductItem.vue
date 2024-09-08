@@ -2,7 +2,7 @@
     <NuxtLink :to="`/product/${product.id}`">        
         <div class="product">
             <div class="product__image">
-                <NuxtImg :src="product.image"  />
+                <NuxtImg :src="product.image_url"  />
             </div>
             <div class="product__info">
                 <div class="product__title">

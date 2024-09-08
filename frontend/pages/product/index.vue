@@ -20,7 +20,9 @@
 
 
 <script setup>
-const { data: products, error, refresh, clear } = useFetch('https://fakestoreapi.com/products', {
+const config = useRuntimeConfig()
+
+const { data: products, error, refresh, clear } = useFetch(`${config.public.apiUrl}/products`, {
     timeout: 10000
 })
 </script>

@@ -2,7 +2,7 @@
     <div class="product" v-if="product">
         <div class="product__image">
             <div class="image__box">
-                <NuxtImg :src="product.image" />
+                <NuxtImg :src="product.image_url" />
             </div>
         </div>
         <div class="product__info">

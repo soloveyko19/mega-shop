@@ -20,7 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-const { data: categories, error, clear, refresh } = useFetch('https://fakestoreapi.com/products/categories', {
+const config = useRuntimeConfig()
+
+const { data: categories, error, clear, refresh } = useFetch(`${config.public.apiUrl}/products/categories`, {
     timeout: 10000
 })
 </script>
