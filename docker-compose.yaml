@@ -1,11 +1,21 @@
 services:
-  database:
+  postgres:
     image: postgres:16.4-alpine
     container_name: postgres
-    ports:
-      - 5432:5432
+    # ports: # Only for testing. DO NOT USE it in production!
+    #   - 5432:5432 
     env_file:
       - .env
     volumes:
-      - ./database/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-      - ./database/postgres_data:/var/lib/postgresql/data
+      - ./postgres/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./postgres/postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis
+    # ports: # Only for testing. DO NOT USE it in production!
+    #   - 6379:6379
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/redis_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
