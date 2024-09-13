@@ -26,7 +26,7 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.add_column('products', sa.Column('category_id', sa.Integer(), nullable=False))
-    op.create_foreign_key(None, 'products', 'categories', ['category_id'], ['id'], ondelete='SET NULL')
+    op.create_foreign_key(None, 'products', 'categories', ['category_id'], ['id'], ondelete='CASCADE')
     # ### end Alembic commands ###
 
 

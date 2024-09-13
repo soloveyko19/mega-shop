@@ -4,7 +4,7 @@ from fastapi.routing import APIRouter
 from fastapi.exceptions import HTTPException
 
 from database.postgres import Category, Product
-from database.schemas import ProductOutSchema, ProductInSchema
+from database.schemas import ProductOutSchema, ProductBaseSchema
 
 router = APIRouter()
 
@@ -16,8 +16,8 @@ async def get_products() -> Iterable[Product]:
 
 
 @router.post("/products", response_model=ProductOutSchema, status_code=201)
-async def post_products(data: ProductInSchema) -> Product:
-    product = Product(**data.model_dump())
+async def post_products(data: ProductBaseSchema) -> Product:
+    product = Product(**data.model_dump(), owner_id=1)
     await product.save()
     return product
 
@@ -40,7 +40,7 @@ async def get_product_by_id(id: int):
 
 
 @router.put("/products/{id}", response_model=ProductOutSchema)
-async def put_product_by_id(new_product: ProductInSchema, id: int):
+async def put_product_by_id(new_product: ProductBaseSchema, id: int):
     product = await Product.get(id)
     if not product:
         raise HTTPException(404, "No such product you're requesting.")

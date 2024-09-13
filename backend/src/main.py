@@ -5,9 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 def init_routes(app: FastAPI):
     from routes.products import router as r1
     from routes.categories import router as r2
+    from routes.users import router as r3
     
     app.include_router(r1)
     app.include_router(r2)
+    app.include_router(r3)
 
 
 def setup_cors(app: FastAPI):
