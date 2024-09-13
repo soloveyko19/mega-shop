@@ -17,6 +17,7 @@ class ProductBaseSchema(BaseModel):
 
 class ProductOutSchema(ProductBaseSchema):
     id: int
+    owner_id: int
 
 
 # Category
