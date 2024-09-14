@@ -169,3 +169,6 @@ postgres_data/
 
 # Redis files
 redis_data/
+
+# Vetur
+vetur.config.js
