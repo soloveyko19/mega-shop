@@ -14,10 +14,12 @@
 </template>
 
 <script setup>
+
 const config = useRuntimeConfig()
 const { id } = useRoute().params
+const baseApiUrl = import.meta.server ? config.apiUrlServer: config.public.apiUrlClient
 
-const url = `${config.public.apiUrl}/products/${id}`
+const url = `${baseApiUrl}/products/${id}`
 const { data: product, error, clear, refresh } = useFetch(url)
 </script>
 

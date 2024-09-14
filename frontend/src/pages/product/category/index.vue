@@ -21,8 +21,9 @@
 
 <script lang="ts" setup>
 const config = useRuntimeConfig()
+const baseApiUrl = import.meta.server ? config.apiUrlServer: config.public.apiUrlClient
 
-const { data: categories, error, clear, refresh } = useFetch(`${config.public.apiUrl}/products/categories`, {
+const { data: categories, error, clear, refresh } = useFetch(`${baseApiUrl}/products/categories`, {
     timeout: 10000
 })
 </script>

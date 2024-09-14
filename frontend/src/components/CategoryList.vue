@@ -36,7 +36,7 @@ import downArrowImage from '@/assets/img/arrow-down.svg'
 const config = useRuntimeConfig()
 let showCategoryList = useState<boolean>("showCategoryList", () => false)
 
-const { data: categories, error } = useFetch(`${config.public.apiUrl}/category`,
+const { data: categories, error } = useFetch(`${config.public.apiUrlClient}/category`,
     {
         timeout: 10000,
         server: false,

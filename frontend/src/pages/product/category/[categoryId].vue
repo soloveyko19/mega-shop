@@ -18,12 +18,12 @@
 
 <script setup>
 const config = useRuntimeConfig()
-
 const { categoryId } = useRoute().params
+const baseApiUrl = import.meta.server ? config.apiUrlServer: config.public.apiUrlClient
 
-const { data: category } = useFetch(`${config.public.apiUrl}/category/${categoryId}`)
+const { data: category } = useFetch(`${baseApiUrl}/category/${categoryId}`)
 
-const { data: products, error, refresh, clear } = useFetch(`${config.public.apiUrl}/products/category/${categoryId}`, {
+const { data: products, error, refresh, clear } = useFetch(`${baseApiUrl}/products/category/${categoryId}`, {
     timeout: 10000
 })
 </script>

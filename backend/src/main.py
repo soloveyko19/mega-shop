@@ -33,6 +33,8 @@ def load_config(app: FastAPI):
     setup_cors(app)
     setup_middlewares(app)
 
+    app.root_path =  "/api"
+
 
 def create_app():
     app = FastAPI(debug=True)
