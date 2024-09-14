@@ -8,7 +8,11 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiUrl: "null"
+      apiUrl: process.env.NUXT_PUBLIC_API_URL
     }
-  }
+  },
+  nitro: {
+    preset: "node-server",
+  },
+  ssr: true,
 })

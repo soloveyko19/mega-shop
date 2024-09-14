@@ -52,11 +52,25 @@ services:
     env_file:
       - ./.env
 
-
+  frontend:
+    build: 
+      dockerfile: Dockerfile
+      context: ./frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env
+          
+          
 networks:
   postgres_network:
     driver: bridge
   redis_network:
+    driver: bridge
+  backend:
     driver: bridge
     
     
