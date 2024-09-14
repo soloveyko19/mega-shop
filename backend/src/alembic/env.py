@@ -27,7 +27,7 @@ import conf
 
 config.set_main_option(
     "sqlalchemy.url",
-    f"postgresql://{conf.POSTGRES_USERNAME}:{conf.POSTGRES_PASSWORD}@{conf.POSTGRES_HOSTNAME}/{conf.POSTGRES_DB_NAME}"
+    f"postgresql://{conf.POSTGRES_USER}:{conf.POSTGRES_PASSWORD}@{conf.POSTGRES_HOSTNAME}/{conf.POSTGRES_DB_NAME}"
 )
 
 # other values from the config, defined by the needs of env.py,

@@ -21,6 +21,7 @@ async def post_products(data: ProductBaseSchema, request: Request) -> Product:
     user = request.state.user
     if not user:
         raise HTTPException(400, "You are not logged in")
+    # TODO: check if category really exist
     product = Product(**data.model_dump(), owner_id=user.id)
     await product.save()
     return product

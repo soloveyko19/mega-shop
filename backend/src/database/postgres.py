@@ -9,7 +9,7 @@ import conf
 from utils.exceptions import UsernameAlreadyTakenError
 
 
-POSTRGES_URL = f"postgresql+asyncpg://{conf.POSTGRES_USERNAME}:{conf.POSTGRES_PASSWORD}@{conf.POSTGRES_HOSTNAME}/{conf.POSTGRES_DB_NAME}"
+POSTRGES_URL = f"postgresql+asyncpg://{conf.POSTGRES_USER}:{conf.POSTGRES_PASSWORD}@{conf.POSTGRES_HOSTNAME}/{conf.POSTGRES_DB_NAME}"
 engine = create_async_engine(url=POSTRGES_URL)
 async_session = async_sessionmaker(
     bind=engine,
