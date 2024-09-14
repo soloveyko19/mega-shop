@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator, ValidationError
+from pydantic import BaseModel, Field, field_validator
 from decimal import Decimal
 import re
 
@@ -7,7 +7,7 @@ import re
 class ProductBaseSchema(BaseModel):
     title: str = Field(max_length=100, min_length=3)
     description: str = Field(max_length=4000)
-    price: Decimal = Field(decimal_places=2, max_digits=15)
+    price: Decimal = Field(decimal_places=2, max_digits=15, ge=0)
     image_url: str = Field(default=None)
     category_id: int = Field(ge=0)
 

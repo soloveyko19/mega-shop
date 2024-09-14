@@ -21,7 +21,10 @@ async def post_products(data: ProductBaseSchema, request: Request) -> Product:
     user = request.state.user
     if not user:
         raise HTTPException(400, "You are not logged in")
-    # TODO: check if category really exist
+    
+    if not await Category.get(data.category_id):
+        raise HTTPException(400, "Value error. Invalid category_id.")
+    
     product = Product(**data.model_dump(), owner_id=user.id)
     await product.save()
     return product
@@ -49,12 +52,18 @@ async def put_products_by_id(new_product: ProductBaseSchema, id: int, request: R
     user = request.state.user
     if not user:
         raise HTTPException(400, "You are not logged in")
+    
     product = await Product.get(id)
+
     if not product:
         raise HTTPException(404, "No such product you're requesting.")
+    
     if not product.owner_id == user.id:
         raise HTTPException(400, "You are not permitted to change this product")
     
+    if not await Category.get(new_product.category_id):
+        raise HTTPException(400, "Value error. Invalid category_id.")
+
     for field, value in new_product.model_dump().items():
         product.__setattr__(field, value)
         
