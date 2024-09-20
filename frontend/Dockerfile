@@ -12,4 +12,4 @@ COPY ./src/ ./
 
 RUN npm run build
 
-CMD npm run start
+CMD sh ./server/start.sh

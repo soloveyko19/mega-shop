@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
+import conf
+
 
 def init_routes(app: FastAPI):
     from routes.products import router as r1
@@ -15,12 +17,19 @@ def init_routes(app: FastAPI):
 
 def setup_cors(app: FastAPI):
     origins = [
-        "*"
+        conf.DOMAIN_NAME
     ]
+    methods = (
+        "GET",
+        "POST",
+        "PUT"
+    )
 
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
+        allow_methods=methods,
+        allow_credentials=True
     )
 
 def setup_middlewares(app: FastAPI):

@@ -59,6 +59,10 @@ const { data: categories, error } = useFetch(`${config.public.apiUrlClient}/cate
     gap: 5px
 }
 
+.category__title {
+    cursor: default;
+}
+
 .icon {
     display: flex;
     align-items: center;

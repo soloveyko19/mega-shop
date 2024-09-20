@@ -8,6 +8,7 @@ if env_path:
 
 # General
 TESTING = True if os.environ.get("TESTING", "").lower() == "true" else False 
+DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "")
 
 # Postgres
 POSTGRES_HOSTNAME = os.environ.get("POSTGRES_HOSTNAME", "")

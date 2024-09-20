@@ -12,7 +12,9 @@
                 <div class="error__text">
                     Error on fetching products
                 </div>
-                <button class="error__btn" @click="clear(); refresh()">Try again</button>
+                <BaseButton :click="() => {clear(); refresh()}">
+                    Try again
+                </BaseButton>
             </div>
         </Card>
     </div>
@@ -40,22 +42,5 @@ const { data: products, error, refresh, clear } = useFetch(`${baseApiUrl}/produc
     flex-direction: column;
     gap: 10px;
     align-items: center;
-}
-
-.error__btn {
-    color: black;
-    padding: 10px 15px;
-    background-color: rgb(230, 230, 230);
-    border-radius: 10px;
-    font-size: 1em;
-    width: fit-content;
-    border: none;
-    border: 1px solid black;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.error__btn:hover {
-    background-color: rgb(210, 210, 210);
 }
 </style>

@@ -27,6 +27,9 @@
                     <CategoryList />
                 </li>
             </ul>
+            <div class="nav__profile">
+                <ProfileMenu />
+            </div>
         </nav>
     </header>
 </template>
@@ -54,6 +57,7 @@ a {
     align-items: center;
     column-gap: 50px;
     row-gap: 10px;
+    width: 100%;
 }
 
 .nav__brand_name {
@@ -92,6 +96,10 @@ a {
 .header__theme {
     display: flex;
     align-items: center;
+}
+
+.nav__profile {
+    margin-left: auto;
 }
 
 </style>

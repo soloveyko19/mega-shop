@@ -37,7 +37,6 @@ async def register(user_in: UserInSchema, request: Request):
     return user
         
 
-
 @router.post("/login")
 async def login(user_in: UserInSchema, response: Response, request: Request):
     if request.state.user:
@@ -48,15 +47,15 @@ async def login(user_in: UserInSchema, response: Response, request: Request):
     if not user or not verify_password(str(user.password), user_in.password):
         raise HTTPException(400, "Incorrect username or password. Check credentials and try again.")
     
-    session_id = await generate_session_id()
+    session_id = generate_session_id()
 
     response.set_cookie(
         key="session_id",
         value=session_id,  
         max_age=604800,
-        secure=(not conf.TESTING),
+        secure=True,
         httponly=True,
-        samesite="strict"
+        samesite="none" if conf.TESTING else "strict"
     )
     await session_storage.set(
         name=session_id,

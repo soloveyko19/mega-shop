@@ -172,3 +172,6 @@ redis_data/
 
 # Vetur
 vetur.config.js
+
+# ssl certificates
+ssl/
