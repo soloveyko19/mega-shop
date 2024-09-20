@@ -64,9 +64,14 @@ async function loginRequest (data: credentials) {
         method: "POST",
         timeout: 10000,
         server: false,
+        credentials: 'include',
         body: data,
         onRequest() {
             status.value = "pending"
+        },
+        onRequestError() {
+            status.value = 'error'
+            errorMessage.value = 'Invalid request'
         },
         onResponse() {
             status.value = 'success'

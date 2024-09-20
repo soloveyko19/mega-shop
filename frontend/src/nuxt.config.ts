@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -16,4 +17,10 @@ export default defineNuxtConfig({
     preset: "node-server",
   },
   ssr: true,
+  devServer: {
+    https: {
+      cert: "../../ssl/cert.pem",
+      key: "../../ssl/key.pem"
+    }
+  }
 })
