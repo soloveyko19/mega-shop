@@ -14,7 +14,9 @@
   "dependencies": {
     "@nuxt/image": "^1.8.0",
     "@nuxtjs/dotenv": "^1.4.2",
-    "nuxt": "^3.13.0",
+    "@pinia/nuxt": "^0.5.4",
+    "nuxt": "^3.13.2",
+    "pinia": "^2.2.2",
     "vue": "latest"
   }
 }

@@ -8,16 +8,12 @@
             <div class="login_form__item">
                 <input type="password" name="password" class="form__input" placeholder="Password" v-model="formData.password" maxlength="100">
             </div>
-            <div class="login_form__item" v-if="status == 'success'">
-                Success
+            <div class="login_form__item" v-if="status == 'error'">
+                {{ errorMessage || 'Error' }}
             </div>
-            <div class="login_form__item" v-else-if="status == 'error'">
-                {{ errorMessage }}
-            </div>
-
             <div class="login_form__item">
                 <div class="login__button">
-                    <BaseButton :click="() => loginRequest(formData)">
+                    <BaseButton :click="register">
                         <div class="loading" v-if="status == 'pending'">
                             <LoadingSpinner />
                         </div>
@@ -38,45 +34,45 @@
 
 
 <script setup lang="ts">
-import type { credentials } from '~/utils/types';
+import type { credentials, requestStatus } from '~/utils/types';
 import { validatePassword, validateUsername } from '~/utils/validators';
 
-const status = useState<"pending" | "success" | "error" | null>("status", () => null)
+const status = useState<requestStatus>("status", () => 'idle')
 const errorMessage = useState<String>("errorMessage", () => "")
+const profile = useProfileStore()
+const router = useRouter()
 
-const config = useRuntimeConfig()
-const baseApiUrl = config.public.apiUrlClient
 const formData: credentials = { username: "", password: "" }
 
-
-
-async function loginRequest (data: credentials) {
-    try {
-        validateUsername(data.username)
-        validatePassword(data.password)
-    } catch ({ message }: any) {
-        status.value = 'error'
-        errorMessage.value = message
-        return
+watchEffect(() => {
+    if (profile.loaded && profile.isLoggedIn) {
+        router.push('/me')
     }
+})
 
-    await useFetch(`${baseApiUrl}/register`, {
-        method: "POST",
-        timeout: 10000,
-        server: false,
-        body: data,
-        onRequest() {
-            status.value = "pending"
-        },
-        onResponse() {
-            status.value = 'success'
-        },
-        onResponseError() {
+async function register() {
+    status.value = 'pending'
+    try {
+        validateUsername(formData.username)
+        validatePassword(formData.password)
+    } catch (error) {
+        if (error instanceof Error) {
             status.value = 'error'
-            errorMessage.value = 'Username and/or password not valid'
+            errorMessage.value = error.message
         }
-    })
+    }
+    try {
+        await profile.register(formData)
+        await profile.login(formData)
+        await profile.fetchMe()
+        router.push('/me')
+        status.value = 'idle'
+    } catch (error) {
+        status.value = 'error'
+        errorMessage.value = error.response._data.detail
+    }
 }
+
 </script>
 
 

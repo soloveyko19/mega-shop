@@ -35,10 +35,13 @@ export function validatePassword(password: credentials["password"]) {
         } else if (char === char.toLowerCase() && isNaN(Number(char))) {
             hasLowerCase = true;
         }
-        
         if (hasSpecialChar && hasUpperCase && hasLowerCase) {
             break;
         }
+    }
+
+    if (password.length < 8) {
+        throw new Error("Password should contain at least 8 characters");
     }
 
     if (!hasSpecialChar) {

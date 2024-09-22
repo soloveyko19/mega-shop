@@ -8,16 +8,12 @@
             <div class="login_form__item">
                 <input type="password" name="password" class="form__input" placeholder="Password" v-model="formData.password" maxlength="100">
             </div>
-            <div class="login_form__item" v-if="status == 'success'">
-                Success
-            </div>
-            <div class="login_form__item" v-else-if="status == 'error'">
+            <div class="login_form__item" v-if="status == 'error'">
                 {{ errorMessage }}
             </div>
-
             <div class="login_form__item">
                 <div class="login__button">
-                    <BaseButton :click="() => loginRequest(formData)">
+                    <BaseButton :click="login">
                         <div class="loading" v-if="status == 'pending'">
                             <LoadingSpinner />
                         </div>
@@ -29,7 +25,7 @@
             </div>
             <div class="login_form__item">
                 <div class="no_account_label">
-                    Don't hane an account? <NuxtLink to="/register">Register now</NuxtLink>
+                    Don't have an account? <NuxtLink to="/register">Register now</NuxtLink>
                 </div>
             </div>
         </div>
@@ -38,49 +34,45 @@
 
 
 <script setup lang="ts">
-import type { credentials } from '~/utils/types';
+import type { credentials, requestStatus } from '~/utils/types';
 import { validatePassword, validateUsername } from '~/utils/validators';
 
-const status = useState<"pending" | "success" | "error" | null>("status", () => null)
+const status = useState<requestStatus>("status", () => 'idle')
 const errorMessage = useState<String>("errorMessage", () => "")
+const profile = useProfileStore()
+const router = useRouter()
 
-const config = useRuntimeConfig()
-const baseApiUrl = config.public.apiUrlClient
 const formData: credentials = { username: "", password: "" }
 
+watchEffect(() => {
+    if (profile.loaded && profile.isLoggedIn) {
+        router.push('/me')
+    }
+})
 
 
-async function loginRequest (data: credentials) {
+async function login() {
+    status.value = 'pending'
     try {
-        validateUsername(data.username)
-        validatePassword(data.password)
-    } catch ({ message }: any) {
-        status.value = 'error'
-        errorMessage.value = message
+        validateUsername(formData.username)
+        validatePassword(formData.password)
+    } catch (error) {
+        if (error instanceof Error) {
+            status.value = 'error'
+            errorMessage.value = error.message
+        }
         return
     }
-
-    await useFetch(`${baseApiUrl}/login`, {
-        method: "POST",
-        timeout: 10000,
-        server: false,
-        credentials: 'include',
-        body: data,
-        onRequest() {
-            status.value = "pending"
-        },
-        onRequestError() {
-            status.value = 'error'
-            errorMessage.value = 'Invalid request'
-        },
-        onResponse() {
-            status.value = 'success'
-        },
-        onResponseError() {
-            status.value = 'error'
-            errorMessage.value = 'Username and/or password not valid'
-        }
-    })
+    try {
+        await profile.login(formData)
+        await profile.fetchMe()
+        router.push('/me')
+        status.value = 'idle'
+    } catch (error) {
+        status.value = 'error'
+        errorMessage.value = error.response._data.detail
+    }
+    
 }
 </script>
 

@@ -3,3 +3,10 @@ export interface credentials {
     password: string
 }
 
+export interface profile {
+    username: string,
+    id: number
+}
+
+
+export type requestStatus = 'idle' | 'pending' | 'success' | 'error'

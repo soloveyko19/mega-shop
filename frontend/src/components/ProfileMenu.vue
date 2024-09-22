@@ -1,26 +1,27 @@
 <template>
     <div class="profile__box">
-        <div class="login" v-if="!me">
+        <div class="profile__name" v-if="profile.loaded && profile.isLoggedIn">
+            <NuxtLink to="/me">
+                <div class="profile__wrapper">
+                    {{ profile.username }}
+                </div>
+            </NuxtLink>
+        </div>
+        <div class="login" v-else>
             <NuxtLink to="/login">
                 <div class="profile__wrapper">
                     Log in
                 </div>
             </NuxtLink>
         </div>
-        <div class="profile__name" v-else>
-            <div class="profile__wrapper">
-                {{ me.username }}
-            </div>
-        </div>
     </div>
 </template>
 
-<script setup>
-const config = useRuntimeConfig()
-const { data: me } = useFetch(`${config.public.apiUrlClient}/me`, {
-    timeout: 10000,
-    server: false,
-    credentials: "include"
+<script setup lang="ts">
+import { useProfileStore } from '~/stores/profile';
+const profile = useProfileStore()
+onMounted(() => {
+    profile.fetchMe()
 })
 </script>
 
@@ -35,7 +36,7 @@ const { data: me } = useFetch(`${config.public.apiUrlClient}/me`, {
     background-color: #fff2;
 }
 
-.login a {
+a {
     color: rgb(200, 200, 200);
 }
 

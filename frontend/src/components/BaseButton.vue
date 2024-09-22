@@ -1,34 +1,48 @@
 <template>
-    <button class="btn" @click="click && click()">
+    <button class="btn" :class="'btn_' + (color ? color: 'primary')" @click="click && click()">
         <slot />
     </button>
 </template>
 
 
 <script setup lang="ts">
-const { click } = defineProps({
-    click: {
-        type: Function,
-    }
-})
+interface props {
+    click: Function
+    color?: 'primary' | 'red'
+}
+
+const { click, color } = defineProps<props>()
 </script>
 
 
 <style scoped>
 .btn {
-    color: black;
     padding: 10px 15px;
-    background-color: rgb(230, 230, 230);
     border-radius: 10px;
     font-size: 1em;
     width: fit-content;
     border: none;
-    border: 1px solid black;
     cursor: pointer;
     transition: 0.2s;
 }
 
-.btn:hover {
+.btn_primary {
+    color: black;
+    background-color: rgb(230, 230, 230);
+    border: 1px solid black;
+}
+
+.btn_red {
+    color: rgb(33, 33, 33);
+    background-color: rgb(255, 220, 220);
+    border: 1px solid red;
+}
+
+.btn_primary:hover {
     background-color: rgb(210, 210, 210);
+}
+
+.btn_red:hover {
+    background-color: rgb(255, 200, 200);
 }
 </style>
