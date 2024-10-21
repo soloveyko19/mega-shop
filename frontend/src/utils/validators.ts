@@ -1,4 +1,4 @@
-import type { credentials } from "./types"
+import type { credentials, product } from "./types"
 
 export function validateUsername(username: credentials["username"]) {
     if (username.length < 3) {
@@ -55,4 +55,35 @@ export function validatePassword(password: credentials["password"]) {
     }
 
     return true;
+}
+
+
+export function validateProduct(toValidate: product) {
+    if (toValidate.title.length < 3) {
+        throw new Error('Product title should contain at least 3 characters')
+    }
+    if (toValidate.title.length > 100) {
+        throw new Error('Product title can contain maximum 100 characters')
+    }
+    if (toValidate.description.length < 1) {
+        throw new Error('Product description should contain at least 1 character')
+    }
+    if (toValidate.description.length > 4000) {
+        throw new Error('Product description can contain maximum 4000 characters')
+    }
+    if (toValidate.category_id == 0) {
+        throw new Error('Product category must be selected')
+    }
+    if (toValidate.price == 0) {
+        throw new Error('Product price cannot be zero')
+    }
+    if (toValidate.price.toString().replace('.', '').length > 15) {
+        throw new Error('Product price cannot contain more than 15 digits')
+    }
+    try {
+        new URL(toValidate.image_url)
+    } catch (_) {
+        throw new Error('Product image url is not valid')
+    }
+
 }

@@ -24,7 +24,14 @@
                     </NuxtLink>
                 </li>
                 <li class="nav__item">
-                    <CategoryList />
+                    <CategoryList :click="(category: category) => { router.push(`/product/category/${category.id}`) }" />
+                </li>
+                <li class="nav__item" v-if="profile.loaded && profile.isLoggedIn">
+                    <NuxtLink to="/product/add">
+                        <div class="item__wrapper">
+                            New ad
+                        </div>
+                    </NuxtLink>
                 </li>
             </ul>
             <div class="nav__profile">
@@ -35,6 +42,11 @@
 </template>
 
 <script setup lang="ts">
+import { type category } from '~/utils/types';
+
+const router = useRouter()
+const profile = useProfileStore()
+
 </script>
 
 <style scoped>

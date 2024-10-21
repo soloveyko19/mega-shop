@@ -4,8 +4,7 @@
             <ProductDetail :product="product" />
         </div>
         <div class="product__error" v-else-if="error">
-            Error
-            <button @click="clear(); refresh()">Try again</button>
+            404 Not found
         </div>
         <div class="product__loading" v-else>
             <LoadingSpinner/>

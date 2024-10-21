@@ -8,7 +8,7 @@ class ProductBaseSchema(BaseModel):
     title: str = Field(max_length=100, min_length=3)
     description: str = Field(max_length=4000)
     price: Decimal = Field(decimal_places=2, max_digits=15, ge=0)
-    image_url: str = Field(default=None)
+    image_url: str 
     category_id: int = Field(ge=0)
 
     class Config:

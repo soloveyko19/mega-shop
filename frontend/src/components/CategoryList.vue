@@ -6,22 +6,27 @@
     >
         <div class="category__main">
             <div class="category__title">
-                Category
+                <div class="title__text" v-if="!title">
+                    Category
+                </div>
+                <div class="title__text" v-else>
+                    {{ title }}
+                </div>
             </div> 
             <div class="icon">
-                <img :src="downArrowImage">
+                <img :src="color ? color == 'white' ? downArrowWhiteImage : downArrowBlackImage : downArrowWhiteImage">
             </div>
         </div>
-        <ul class="category__list" v-if="showCategoryList && categories">
-            <li v-for="category in categories" :key="category.id" class="category__item">
-                <NuxtLink :to="`/product/category/${category.id}`">
+        <ul class="category__list" v-if="showCategoryList && categoryStore.fetched">
+            <li v-for="category in categoryStore.data" :key="category.id" class="category__item">
+                <button @click="click && click(category)" class="blank_button">
                     <div class="item__wrapper">
                         {{ category.name }}
                     </div>
-                </NuxtLink>
+                </button>
             </li>
         </ul>
-        <div class="categories__error" v-else-if="showCategoryList && error">
+        <div class="categories__error" v-else-if="false">
             Error on fetching categories
         </div>
         <div class="categories__loading" v-else-if="showCategoryList">
@@ -31,20 +36,34 @@
 </template>
 
 <script setup lang="ts">
-import downArrowImage from '@/assets/img/arrow-down.svg'
+interface props {
+    click?: Function,
+    title?: string,
+    color?: 'white' | 'black'
+}
 
-const config = useRuntimeConfig()
-let showCategoryList = useState<boolean>("showCategoryList", () => false)
+import downArrowWhiteImage from '@/assets/img/arrow-down-white.svg'
+import downArrowBlackImage from '@/assets/img/arrow-down-black.svg'
 
-const { data: categories, error } = useFetch(`${config.public.apiUrlClient}/category`,
-    {
-        timeout: 10000,
-        server: false,
+const { click, title } = defineProps<props>()
+
+const showCategoryList = ref<boolean>(false)
+const categoryStore = useCategoryStore()
+
+watchEffect(() => {
+    if (import.meta.client && !categoryStore.fetched) {
+        categoryStore.fetchCategories()
     }
-)
+})
+
 </script>
 
 <style scoped>
+
+.title__text {
+    text-transform: capitalize;
+}
+
 .category {
     padding: 8px 10px;
     position: relative;
@@ -126,6 +145,14 @@ const { data: categories, error } = useFetch(`${config.public.apiUrlClient}/cate
     display: flex;
     justify-content: center;
     color: rgb(33, 33, 33);
+}
+
+.blank_button {
+    border: none;
+    background-color: transparent;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
 }
 
 </style>

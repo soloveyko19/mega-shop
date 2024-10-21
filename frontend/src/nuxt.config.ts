@@ -8,9 +8,9 @@ export default defineNuxtConfig({
     './assets/css/global.css'
   ],
   runtimeConfig: {
-    apiUrlServer: 'http://backend:5000/api',
+    apiUrlServer: (process.env.TESTING == "true") ? process.env.NUXT_API_URL_CLIENT : 'http://backend:5000/api',
     public: {
-      apiUrlClient: process.env.NUXT_PUBLIC_API_URL_CLIENT
+      apiUrlClient: process.env.NUXT_API_URL_CLIENT
     }
   },
   nitro: {
@@ -24,3 +24,7 @@ export default defineNuxtConfig({
     }
   }
 })
+
+if (process.env.TESTING == "true") {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+}
