@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field, field_validator
+from typing import Optional
+from pydantic import BaseModel, Field, field_validator, EmailStr
 from decimal import Decimal
-import re
 
 
 # Product
@@ -34,22 +34,7 @@ class CategoryOutSchema(CategoryBaseSchema):
 
 # User
 class BaseUserSchema(BaseModel):
-    username: str = Field(min_length=3, max_length=100)
-
-    @field_validator("username")
-    def validate_username(cls, username: str):
-        if ' ' in username:
-            raise ValueError("Username cannot contain spaces.")
-        if not re.match(r'^[a-z0-9_.]+$', username):
-            raise ValueError("Username can contain only latin symbols, numbers, underscores and dots")
-
-        if username.startswith('.') or username.endswith('.'):
-            raise ValueError("Username cannot start or end with dots.")
-
-        if '..' in username:
-            raise ValueError("Username cannot contain two or more dots in a row.")
-        
-        return username
+    email: EmailStr
 
     class Config:
         from_attributes = True    
@@ -86,3 +71,5 @@ class UserInSchema(BaseUserSchema):
 
 class UserOutSchema(BaseUserSchema):
     id: int
+    name: Optional[str] = Field(min_length=3, max_length=100)
+

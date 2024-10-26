@@ -3,7 +3,7 @@
         <div class="profile__name" v-if="profile.loaded && profile.isLoggedIn">
             <NuxtLink to="/me">
                 <div class="profile__wrapper">
-                    {{ profile.username }}
+                    Profile
                 </div>
             </NuxtLink>
         </div>

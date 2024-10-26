@@ -3,7 +3,7 @@
         <h1 class="title">Registration</h1>
         <div class="login_form">
             <div class="login_form__item">
-                <input type="text" name="username" class="form__input" placeholder="Username" v-model="formData.username" maxlength="100">
+                <input type="text" name="username" class="form__input" placeholder="Email" v-model="formData.email" maxlength="100">
             </div>
             <div class="login_form__item">
                 <input type="password" name="password" class="form__input" placeholder="Password" v-model="formData.password" maxlength="100">
@@ -35,14 +35,14 @@
 
 <script setup lang="ts">
 import type { credentials, requestStatus } from '~/utils/types';
-import { validatePassword, validateUsername } from '~/utils/validators';
+import { validatePassword } from '~/utils/validators';
 
 const status = useState<requestStatus>("status", () => 'idle')
 const errorMessage = useState<String>("errorMessage", () => "")
 const profile = useProfileStore()
 const router = useRouter()
 
-const formData: credentials = { username: "", password: "" }
+const formData: credentials = { email: "", password: "" }
 
 watchEffect(() => {
     if (profile.loaded && profile.isLoggedIn) {
@@ -53,7 +53,6 @@ watchEffect(() => {
 async function register() {
     status.value = 'pending'
     try {
-        validateUsername(formData.username)
         validatePassword(formData.password)
     } catch (error) {
         if (error instanceof Error) {
@@ -68,8 +67,10 @@ async function register() {
         router.push('/me')
         status.value = 'idle'
     } catch (error) {
-        status.value = 'error'
-        errorMessage.value = error.response._data.detail
+        if ( error instanceof Error ) {
+            status.value = 'error'
+            errorMessage.value = error.response._data.detail
+        }
     }
 }
 

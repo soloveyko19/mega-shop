@@ -24,7 +24,6 @@
 <script setup>
 const config = useRuntimeConfig()
 const baseApiUrl = import.meta.server ? config.apiUrlServer: config.public.apiUrlClient
-console.log(`${baseApiUrl}/products`)
 const { data: products, status, refresh, clear } = useFetch(`${baseApiUrl}/products`, {
     timeout: 10000,
 })

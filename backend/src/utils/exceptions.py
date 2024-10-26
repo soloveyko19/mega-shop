@@ -1,8 +1,8 @@
-class UsernameError(Exception):
+class EmailError(Exception):
     def __init__(self, message: str = ""):
         self.message = message
 
 
-class UsernameAlreadyTakenError(UsernameError):
+class EmailAlreadyTakenError(EmailError):
     pass
 

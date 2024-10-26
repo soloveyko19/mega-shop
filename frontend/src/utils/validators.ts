@@ -1,24 +1,5 @@
 import type { credentials, product } from "./types"
 
-export function validateUsername(username: credentials["username"]) {
-    if (username.length < 3) {
-        throw new Error("Username should contain at least 3 characters.")
-    } 
-    if (username.includes(" ")) {
-        throw new Error("Username cannot contain spaces.")
-    }
-    if (!/^[a-z0-9_.]+$/.test(username)) {
-        throw new Error("Username should contain only latin characters, numbers, underscores and dots.")
-    }
-    if (username.startsWith(".") || username.endsWith(".")) {
-        throw new Error("Username cannot start or end with dots.")
-    }
-    if (username.includes('..')) {
-        throw new Error("Username cannot contain two or more dots in a row.")
-    }
-    return true
-}
-
 
 export function validatePassword(password: credentials["password"]) {
     const specialChars = "!@#$%^&*()_+=-{}[]\\|/?.`~";

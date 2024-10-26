@@ -3,19 +3,27 @@
         <h1 class="title">Your profile</h1>
         <div class="profile" v-if="profile.isLoggedIn">
             <div class="profile__item">
-                <div class="item__title">
-                    <b>Username</b>
+                <div class="profile__title">
+                    <b>Email</b>
                 </div>
                 <div class="profile__value">
-                    {{ profile.username }}
+                    {{ profile.email }}
                 </div>
             </div>
             <div class="profile__item">
-                <div class="item__title">
+                <div class="profile__title">
                     <b>Id</b>
                 </div>
                 <div class="profile__value">
                     {{ profile.id }}
+                </div>
+            </div>
+            <div class="profile__item">
+                <div class="profile__title">
+                    <b>Name</b>
+                </div>
+                <div class="profile__value">
+                    {{ profile.name ? profile.name: 'Not set' }}
                 </div>
             </div>
             <div class="profile__item">
@@ -78,5 +86,15 @@ async function logout() {
 .profile__item {
     display: flex;
     gap: 20px;
+}
+
+.profile__title {
+    display: flex;
+    align-items: center;
+}
+
+.profile__title {
+    display: flex;
+    align-items: center;
 }
 </style>

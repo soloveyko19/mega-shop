@@ -13,8 +13,7 @@ export const useCategoryStore = defineStore('categoryStore', {
             const config = useRuntimeConfig()
             const baseAPIUrl = config.public.apiUrlClient
             try {
-                const res = await $fetch<categoryList>('/category', {
-                    baseURL: baseAPIUrl,
+                const res = await $fetch<categoryList>(baseAPIUrl + '/category', {
                     timeout: 10000,
                 })
                 this.data = res

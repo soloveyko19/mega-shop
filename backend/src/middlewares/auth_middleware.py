@@ -18,10 +18,10 @@ class AuthMiddleware:
         request.state.session_id = None
         if session_id:
             request.state.session_id = session_id
-            encoded_username = await session_storage.get(session_id)
-            if encoded_username:
-                username = encoded_username.decode()
-                user = await User.get_by_username(username)
+            encoded_email = await session_storage.get(session_id)
+            if encoded_email:
+                email = encoded_email.decode()
+                user = await User.get_by_email(email)
                 request.state.user = user
                 
         return await call_next(request)

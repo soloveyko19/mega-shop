@@ -1,11 +1,12 @@
 export interface credentials {
-    username: string,
+    email: string,
     password: string
 }
 
 export interface profile {
-    username: string,
+    email: string,
     id: number
+    name: string
 }
 
 export interface category {

@@ -13,8 +13,14 @@ DOMAIN_NAME = os.environ.get("DOMAIN_NAME", "")
 # Postgres
 POSTGRES_HOSTNAME = os.environ.get("POSTGRES_HOSTNAME", "")
 POSTGRES_DB_NAME = os.environ.get("POSTGRES_DB_NAME", "")
-POSTGRES_USER= os.environ.get("POSTGRES_USER", "")
+POSTGRES_USER = os.environ.get("POSTGRES_USER", "")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "")
 
 # Redis
 REDIS_HOSTNAME = os.environ.get("REDIS_HOSTNAME", "")
+
+# Google OAuth 2.0
+
+GOOGLE_AUTH_CLIENT_ID = os.environ.get("GOOGLE_AUTH_CLIENT_ID", "")
+GOOGLE_AUTH_CLIENT_SECRET = os.environ.get("GOOGLE_AUTH_CLIENT_SECRET", "")
+GOOGLE_AUTH_REDIRECT_URI = os.environ.get("GOOGLE_AUTH_REDIRECT_URI", "")
