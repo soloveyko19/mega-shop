@@ -15,7 +15,6 @@ export const useProfileStore = defineStore('profile', {
             this.loaded = true
             const config = useRuntimeConfig()
             const baseAPIUrl = config.public.apiUrlClient
-            console.log(baseAPIUrl)
             try {
                 const res = await $fetch<profile>(baseAPIUrl + '/me', {
                     timeout: 10000,
@@ -29,6 +28,19 @@ export const useProfileStore = defineStore('profile', {
                 this.isLoggedIn = false
                 throw error
             }            
+        },
+        async updateMe(name: string, email: string) {
+            const config = useRuntimeConfig()
+            const baseAPIUrl = config.public.apiUrlClient
+            await $fetch<profile>(baseAPIUrl + '/me', {
+                method: 'POST',
+                timeout: 10000,
+                credentials: 'include',
+                body: {
+                    email,
+                    name
+                }
+            })
         },
         async login(meProfile: credentials) {
             const config = useRuntimeConfig()

@@ -4,29 +4,34 @@
         <div class="profile" v-if="profile.isLoggedIn">
             <div class="profile__item">
                 <div class="profile__title">
-                    <b>Email</b>
-                </div>
-                <div class="profile__value">
-                    {{ profile.email }}
-                </div>
-            </div>
-            <div class="profile__item">
-                <div class="profile__title">
-                    <b>Id</b>
+                    Id
                 </div>
                 <div class="profile__value">
                     {{ profile.id }}
                 </div>
             </div>
+            
             <div class="profile__item">
                 <div class="profile__title">
-                    <b>Name</b>
+                    Email
+                </div>
+                <div class="profile__value">
+                    {{ profile.email }}
+                </div>
+            </div>
+            
+            <div class="profile__item">
+                <div class="profile__title">
+                    Name
                 </div>
                 <div class="profile__value">
                     {{ profile.name ? profile.name: 'Not set' }}
                 </div>
             </div>
             <div class="profile__item">
+                <BaseButton :click="editProfile" :color="'primary'">
+                    Edit profile
+                </BaseButton>
                 <BaseButton :click="logout" :color="'red'">
                     <div class="logout_wrapper">
                         <div class="logout__idle" v-if="logoutStatus == 'idle'">
@@ -45,6 +50,11 @@
         <div class="profile__loading" v-else>
             <LoadingSpinner />
         </div>
+        <div class="modal_window" v-if="showModalWindow">
+            <ModalWindow :exit="closeModal">
+                <UpdateProfileForm :onSuccess="() => {showModalWindow = false}" :defaultEmail="profile.email" :defaultName="profile.name" />
+            </ModalWindow>
+        </div>
     </Card>
 </template>
 
@@ -52,9 +62,10 @@
 import type { requestStatus } from '~/utils/types';
 import { useProfileStore } from '~/stores/profile';
 
-const logoutStatus = useState<requestStatus>('logoutRequestStatus', () => 'idle') 
+const logoutStatus = ref<requestStatus>('idle') 
 const profile = useProfileStore()
 const router = useRouter()
+const showModalWindow = ref<boolean>(false)
 
 watchEffect(() => {
     if (profile.loaded && !profile.isLoggedIn) {
@@ -74,27 +85,33 @@ async function logout() {
     logoutStatus.value = 'idle'
 }
 
+function editProfile() {
+    showModalWindow.value = true;
+}
+
+function closeModal() {
+    showModalWindow.value = false;
+}
+
 </script>
 
 <style scoped>
 .profile {
     display: flex;
     flex-direction: column;
-    gap: 20px;
 }
 
 .profile__item {
     display: flex;
     gap: 20px;
+    flex-direction: column;
+    border-top: 1px solid rgb(150, 150, 150);
+    padding: 10px;
 }
 
 .profile__title {
     display: flex;
     align-items: center;
-}
-
-.profile__title {
-    display: flex;
-    align-items: center;
+    font-size: 1.1em;
 }
 </style>

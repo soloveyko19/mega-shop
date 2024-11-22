@@ -10,7 +10,7 @@ const config = useRuntimeConfig()
 const error = route.query.error
 const code = route.query.code
 
-if (import.meta.client && code) {
+onMounted(async () => {
     const response = await $fetch<{ result: string }>(
         config.public.apiUrlClient + `/login/google?code=${code}`,
         {
@@ -21,7 +21,5 @@ if (import.meta.client && code) {
     if (response.result == 'success') {
         navigateTo('/me')
     }
-}
-
-
+})
 </script>

@@ -4,9 +4,8 @@ services:
     container_name: postgres
     # ports: # Only for testing. DO NOT USE it in production!
     #   - 5432:5432 
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+    env_file:
+      - ./.env
     volumes:
       - ./postgres/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       - ./postgres/postgres_data:/var/lib/postgresql/data
@@ -51,17 +50,8 @@ services:
       - postgres_network
       - redis_network
       - backend
-    environment:
-      - TESTING
-      - DOMAIN_NAME
-      - POSTGRES_HOSTNAME
-      - POSTGRES_DB_NAME
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - REDIS_HOSTNAME 
-      - GOOGLE_AUTH_CLIENT_ID
-      - GOOGLE_AUTH_CLIENT_SECRET
-      - GOOGLE_AUTH_REDIRECT_URI
+    env_file:
+      - ./.env
 
   frontend:
     build: 
@@ -74,9 +64,8 @@ services:
       - backend
     # ports:
     #   - 3000:3000
-    environment:
-      - TESTING
-      - NUXT_API_URL_CLIENT
+    env_file:
+      - ./.env
     networks:
       - backend
       - frontend

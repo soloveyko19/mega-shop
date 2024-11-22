@@ -9,15 +9,17 @@ def init_routes(app: FastAPI):
     from routes.products import router as r1
     from routes.categories import router as r2
     from routes.users import router as r3
+    from routes.auth import router as r4
     
     app.include_router(r1)
     app.include_router(r2)
     app.include_router(r3)
+    app.include_router(r4)
 
 
 def setup_cors(app: FastAPI):
     origins = [
-        conf.DOMAIN_NAME
+        "*" if conf.TESTING else conf.DOMAIN_NAME,
     ]
     methods = (
         "GET",
